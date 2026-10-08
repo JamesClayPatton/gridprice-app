@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Join the Android app beta
+    url: https://gridprice.app/#beta
+    about: Sign up on the website to try the app before it reaches Google Play
+  - name: API documentation
+    url: https://gridprice.app/api.html
+    about: The full API reference on the website

@@ -1,0 +1,27 @@
+name: A price looks wrong
+description: A price is missing, stuck, or doesn't match the source
+labels: ["data"]
+body:
+  - type: input
+    id: provider
+    attributes:
+      label: Provider or city
+      description: The provider id (from /v1/providers) or the city name on the card
+      placeholder: comed
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: When
+      description: Date and time, with your time zone
+      placeholder: 2026-10-07 5:15 PM Central
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What you saw, and what you expected
+      description: A screenshot, the API response, or the price from the utility or grid operator all help
+    validations:
+      required: true

@@ -1,0 +1,21 @@
+name: Add my area
+description: Ask for a utility, grid zone or city to be added
+labels: ["coverage"]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Utility, zone or city
+      placeholder: Duke Energy, North Carolina
+    validations:
+      required: true
+  - type: input
+    id: plan
+    attributes:
+      label: Your pricing plan, if you know it
+      placeholder: Time-of-use, real-time pricing, fixed rate…
+  - type: textarea
+    id: source
+    attributes:
+      label: Where the price is published, if you know
+      description: A link to the utility's or grid operator's price page or data feed makes this much faster

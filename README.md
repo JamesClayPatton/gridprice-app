@@ -92,22 +92,13 @@ Each card shows the current price and its level, how it compares with the 24-hou
 
 ### Put one on your own page
 
-Markdown:
+One line of Markdown:
 
 ```markdown
 [![Electricity price in Chicago](https://gridprice.app/v1/card/chicago.svg)](https://gridprice.app)
 ```
 
-HTML, switching to the light card when the reader uses a light theme:
-
-```html
-<a href="https://gridprice.app">
-  <picture>
-    <source media="(prefers-color-scheme: light)" srcset="https://gridprice.app/v1/card/houston.svg?theme=light">
-    <img src="https://gridprice.app/v1/card/houston.svg" width="520" alt="Live electricity price in Houston">
-  </picture>
-</a>
-```
+Add `?theme=light` to the image URL for a white card on light pages. Every option is in [docs/cards.md](docs/cards.md).
 
 **Cities:** `chicago`, `houston`, `dallas`, `austin`, `san-antonio`, `new-york`, `long-island`, `buffalo`, `albany`, `los-angeles`, `san-diego`, `san-francisco`, `boston`, `hartford`, `providence`, `seattle`, `portland`, `phoenix`, `las-vegas`, `salt-lake-city`, `boise`, `albuquerque`, `minneapolis`, `milwaukee`, `des-moines`, `detroit`, `indianapolis`, `st-louis`, `new-orleans`, `oklahoma-city`, `kansas-city`, `omaha`.
 
@@ -132,61 +123,34 @@ Everything GridPrice shows comes from four public endpoints. The website, the li
 
 ### Examples
 
-```bash
-curl "https://gridprice.app/v1/current?provider=comed"
+Request:
+
 ```
+https://gridprice.app/v1/current?provider=comed
+```
+
+Response:
 
 ```json
 { "ms": 1791430500000, "price": 14.7 }
 ```
 
-```bash
-curl "https://gridprice.app/v1/feed?provider=ercot-lz_houston"
+Request:
+
 ```
+https://gridprice.app/v1/feed?provider=ercot-lz_houston
+```
+
+Response, oldest first:
 
 ```json
 [
   { "ms": 1791345600000, "price": 4.309 },
-  { "ms": 1791346500000, "price": 4.451 },
-  ...
+  { "ms": 1791346500000, "price": 4.451 }
 ]
 ```
 
-In JavaScript:
-
-```js
-const res = await fetch('https://gridprice.app/v1/current?provider=comed');
-const { ms, price } = await res.json();
-console.log(`ComEd is ${price}¢/kWh as of ${new Date(ms).toLocaleTimeString()}`);
-```
-
-In Python:
-
-```python
-import requests
-
-points = requests.get(
-    "https://gridprice.app/v1/history",
-    params={"provider": "nyiso-nyc", "start": "20260901", "end": "20260930"},
-).json()
-
-cheapest = min(points, key=lambda p: p["price"])
-print(f"{len(points)} prices, cheapest {cheapest['price']}¢/kWh")
-```
-
-In Home Assistant, a REST sensor is all it takes:
-
-```yaml
-sensor:
-  - platform: rest
-    name: Electricity price
-    resource: https://gridprice.app/v1/current?provider=comed
-    value_template: "{{ value_json.price }}"
-    unit_of_measurement: "¢/kWh"
-    scan_interval: 300
-```
-
-Full reference: [gridprice.app/api.html](https://gridprice.app/api.html).
+Full reference: [docs/api.md](docs/api.md), also on the website at [gridprice.app/api.html](https://gridprice.app/api.html).
 
 ## Coverage
 
@@ -226,7 +190,7 @@ flowchart LR
     API --> Y[Your project]
 ```
 
-**One server, no dependencies.** The website and the API are a single Node.js process built on the standard library alone: no framework, no database, no build step. It runs unattended on a home server behind a Cloudflare Tunnel. Nothing to update, and nothing to break on `npm install`.
+**One server, no dependencies.** The website and the API are a single Node.js process built on the standard library alone: no framework, no database, no build step. It runs unattended in a Docker container on a self-hosted machine, behind Caddy and a Cloudflare Tunnel. Nothing to update, and nothing to break on `npm install`.
 
 **A harvester every five minutes.** Each grid operator publishes prices its own way: JSON, CSV downloads, zipped archives, HTML pages. The harvester pulls all 47 feeds, turns every reading into the same `{ ms, price }` shape, and merges it into one file per zone per day. Merging by interval means a feed can be read early, late or twice without ever duplicating a point.
 
@@ -248,9 +212,19 @@ Version 1 was a Kotlin Android app for ComEd only, and every phone fetched the p
 - **Android app:** in beta, heading to Google Play. [Join the beta](https://gridprice.app/#beta).
 - **iOS:** planned.
 
+## Documentation
+
+| Page | What's in it |
+|---|---|
+| [API reference](docs/api.md) | Every endpoint, parameter, response, error, caching rule and price level |
+| [Live price cards](docs/cards.md) | Embed a self-updating price image in a README, blog or dashboard |
+| [Coverage](docs/coverage.md) | All 47 feeds, the 33 states, update intervals, and what the prices mean |
+| [How it works](docs/how-it-works.md) | The server, the harvester, history, time zones, the cards and the app |
+| [FAQ](docs/faq.md) | Pricing, coverage, the app, the API and the source code |
+
 ## About this repository
 
-This is the public home of GridPrice: what it does, how it works, the API and the live cards. The server and app source are private.
+This is the public home of GridPrice: what it does, how it works, the API and the live cards. GridPrice is a product I'm still building, so the server and app source code are private. The API is open for anyone to use.
 
 Found a problem with a price feed, or want a city or utility added? [Open an issue](../../issues).
 
