@@ -228,6 +228,8 @@ This is the public home of GridPrice: what it does, how it works, the API and th
 
 Found a problem with a price feed, or want a city or utility added? [Open an issue](../../issues).
 
+The API and the website are free to use. If GridPrice saves you money, you can [buy me a coffee](https://buymeacoffee.com/Clayberd) to help cover the servers.
+
 Built by [James Patton](https://jamesclaypatton.com).
 
 <sub>© 2026 James Patton. All rights reserved. Price data comes from the utilities and grid operators named above.</sub>
